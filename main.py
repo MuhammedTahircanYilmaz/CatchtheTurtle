@@ -15,8 +15,7 @@ the_escapee = turtle.Turtle()
 score_turtle = turtle.Turtle()
 countdown_timer = turtle.Turtle()
 
-# the turtle
-
+# the escapee
 the_escapee.shapesize(1.5)
 the_escapee.penup()
 the_escapee.hideturtle()
