@@ -1,13 +1,22 @@
 from random import randint
 import turtle
 
+game_over = False
+game_length = 10
+points = 0
+randx = 0
+randy = 0
+
 game_screen = turtle.Screen()
 game_screen.title("Catch the Turtle!")
 game_screen.bgcolor("light blue")
 
-game_over = False
-
 the_escapee = turtle.Turtle()
+score_turtle = turtle.Turtle()
+countdown_timer = turtle.Turtle()
+
+# the turtle
+
 the_escapee.shapesize(1.5)
 the_escapee.penup()
 the_escapee.hideturtle()
@@ -17,8 +26,19 @@ the_escapee.color("green")
 the_escapee.showturtle()
 the_escapee.speed('fastest')
 
-randx = 0
-randy = 0
+# score
+score_turtle.hideturtle()
+score_turtle.color("black")
+style = ('Courier', 20, 'italic')
+score_turtle.penup()
+score_turtle.goto(-25, 285)
+score_turtle.write(f"Score: {points}", font=style)
+
+# countdown
+countdown_timer.hideturtle()
+countdown_timer.penup()
+countdown_timer.goto(-92, 250)
+countdown_timer.write("Time Left: ", font=style)
 
 
 def turtle_movement():
@@ -27,25 +47,6 @@ def turtle_movement():
     randx = int(randint(-225, 225))
     randy = int(randint(-225, 225))
     the_escapee.goto(randx, randy)
-
-
-points = 0
-
-score_turtle = turtle.Turtle()
-score_turtle.hideturtle()
-score_turtle.color("black")
-style = ('Courier', 20, 'italic')
-score_turtle.penup()
-score_turtle.goto(-25, 285)
-score_turtle.write(f"Score: {points}", font=style)
-
-countdown_timer = turtle.Turtle()
-countdown_timer.hideturtle()
-countdown_timer.penup()
-countdown_timer.goto(-92, 250)
-countdown_timer.write("Time Left: ", font=style)
-
-game_length = 10
 
 
 def count_down():
