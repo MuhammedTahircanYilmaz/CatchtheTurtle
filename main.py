@@ -1,111 +1,80 @@
 from random import randint
 import turtle
-import time
-import threading
 
 game_screen = turtle.Screen()
-game_screen.title("Catch the Turtle")
+game_screen.title("Catch the Turtle!")
 game_screen.bgcolor("light blue")
 
+game_over = False
+
 the_escapee = turtle.Turtle()
+the_escapee.shapesize(1.5)
 the_escapee.penup()
 the_escapee.hideturtle()
-the_escapee.setposition((randint(-250, 250)), (randint(-250, 250)))
+the_escapee.setposition((randint(-225, 225)), (randint(-225, 225)))
 the_escapee.shape("turtle")
 the_escapee.color("green")
 the_escapee.showturtle()
 the_escapee.speed('fastest')
 
+randx = 0
+randy = 0
+
 
 def turtle_movement():
-    the_escapee.goto((randint(-250, 250)), (randint(-250, 250)))
+    global randx, randy
 
-game_screen.ontimer(turtle_movement, 1000)
-
-the_player = turtle.Turtle()
-#the_player.hideturtle()
-the_player.speed('fastest')
-the_player.penup()
-
+    randx = int(randint(-225, 225))
+    randy = int(randint(-225, 225))
+    the_escapee.goto(randx, randy)
 
 
 points = 0
 
-
-def player_movement():
-    game_screen.onscreenclick(the_player.goto)
-
-
-
-player_movement()
-
-
-score = turtle.Turtle()
-score.hideturtle()
-score.color("black")
+score_turtle = turtle.Turtle()
+score_turtle.hideturtle()
+score_turtle.color("black")
 style = ('Courier', 20, 'italic')
-score.penup()
-score.goto(-25, 285)
-score.write("Score: 0", font=style)
-
+score_turtle.penup()
+score_turtle.goto(-25, 285)
+score_turtle.write(f"Score: {points}", font=style)
 
 countdown_timer = turtle.Turtle()
 countdown_timer.hideturtle()
 countdown_timer.penup()
 countdown_timer.goto(-92, 250)
-countdown_timer.write("Remaining: 59", font=style)
+countdown_timer.write("Time Left: ", font=style)
 
-game_length = 15
+game_length = 10
 
-while game_length >= 0:
 
-    game_length = game_length-1
-    countdown_timer.clear()
-    countdown_timer.write("Remaining: " + str(game_length), font=style)
-    turtle_movement()
-    if game_length == 0:
+def count_down():
+    global game_over, game_length
+
+    if game_length >= 0:
         countdown_timer.clear()
-        countdown_timer.write("Game Over!", font=style)
-        break
-
-turtle.mainloop()
-
-
-
-def the_escapee_caught(the_player):
-    return the_player.distance(the_escapee) < 10
-
-def play_game():
-    global points
-
-    if the_escapee_caught(the_player):
-        points +=1
-        score.clear()
-        score.write("Score:" + str(points), font=style)
+        countdown_timer.write(f"Time Left: {game_length}", font=style)
+        game_length -= 1
+        game_screen.ontimer(count_down, 1000)
         turtle_movement()
 
-
-'''
-to do 
-
-the start
-    the code should start after the detection of the first click
-
-turtle symbol (that moves randomly)
-    turtle symbol +
-    the movement + 
-    
-score board(that increases when the player clicks on the turtle symbol)
-    the text +
-    the detection of clicking on the symbol
-
-timer(that counts down)
-    the text
-    count down
-    
-game over
-    the text "Game Over!" after the count down reaches zero
-'''
+    else:
+        game_over = True
+        countdown_timer.clear()
+        countdown_timer.write("Game Over", font=style)
+        the_escapee.hideturtle()
 
 
+def score_up(x, y):
+    global points, randx, randy
 
+    if (abs(randx - x) < 50) and (abs(randy - y) < 50) and not game_over:
+        points += 1
+        score_turtle.clear()
+        score_turtle.write(f"Score : {points}", font=style)
+
+
+count_down()
+the_escapee.onclick(score_up)
+game_screen.update()
+turtle.mainloop()
